@@ -1,3 +1,4 @@
+name: Create Google Compute VM
 on:
   workflow_dispatch:
     inputs:
