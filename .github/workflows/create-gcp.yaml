@@ -7,7 +7,7 @@ on:
         required: true
         type: string
         default: ""
-      ssh-pub-ky:
+      ssh-pub-key:
         description: SSH Public key
         required: true
         type: string
@@ -24,6 +24,8 @@ jobs:
       packages: write
       contents: read
       id-token: write
+    env:
+      SSH_PUBKEY: ${{ github.event.inputs.ssh-pub-key }}
     steps:
       - uses: actions/checkout@v3
 
@@ -44,7 +46,7 @@ jobs:
           mv cloud-config-updated.yaml cloud-config.yaml
 
       - name: Add Credential
-        working-directory: .github/workflow/IaC
+        working-directory: .github/workflows/IaC
         run: |
           gh secret set GOOGLE_CREDENTIALS
           gh secret set GOOGLE_CREDENTIALS < ${{ github.event.inputs.google-credential }}
