@@ -54,3 +54,4 @@ resource "google_compute_firewall" "aleonode_firewall" {
 
 output "public_ip" {
   value = google_compute_instance.aleo-node.network_interface[0].access_config[0].nat_ip
+}
