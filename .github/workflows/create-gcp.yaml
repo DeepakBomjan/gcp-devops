@@ -1,0 +1,27 @@
+on:
+  workflow_dispatch:
+    inputs:
+      google-credential:
+        description: Input gcp credential in base64
+        required: true
+        type: string
+        default: ""
+      project-id:
+        description: Input project id
+        required: true
+        type: string
+        default: ""
+jobs:
+  create_google_vm:
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+      id-token: write
+  steps:
+      - uses: actions/checkout@v3
+
+      - Name: Add gcp access
+        
+        run: |
+          echo "${{ github.event.inputs.google-credential }}" 
