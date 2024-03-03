@@ -42,12 +42,11 @@ jobs:
         run: |
           gh secret set GOOGLE_CREDENTIALS
           gh secret set GOOGLE_CREDENTIALS < ${{ github.event.inputs.google-credential }}
-      - uses: 'google-github-actions/auth@v2'
+      - uses: google-github-actions/auth@v2
         with:
-          credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
+          credentials_json: ${{ secrets.GOOGLE_CREDENTIALS }}
       
-      - uses: Create Google Comput
-      - name:  check instance status
+      - name:  Create Google Comput
         run: |
           public_ip=$(gcloud compute instances describe test --zone "us-central1-a" --project "${{ github.event.inputs.project-id}}" | grep natIP | awk -F\: '{print $2}')
           ssh -q -o BatchMode=yes -o ConnectTimeout=5 -o StrictHostKeyChecking=no -i /home/sicmapp/.ssh/id_rsa "echo 2>&1" && echo $host SSH_OK || echo $host SSH_NOK
