@@ -40,7 +40,7 @@ jobs:
           terraform_wrapper: false
 
       - name: Update cloud-init configuration
-        working-directory: .github/workflow/IaC
+        working-directory: .github/workflows/IaC
         run: |
           envsubst < cloud-config.yaml > cloud-config-updated.yaml
           mv cloud-config-updated.yaml cloud-config.yaml
