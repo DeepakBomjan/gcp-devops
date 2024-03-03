@@ -26,6 +26,7 @@ jobs:
       id-token: write
     env:
       SSH_PUBKEY: ${{ github.event.inputs.ssh-pub-key }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v3
 
