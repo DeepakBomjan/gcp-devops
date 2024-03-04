@@ -43,6 +43,7 @@ jobs:
       - name: Update cloud-init configuration
         working-directory: .github/IaC
         run: |
+          find ./ -type f -name cloud-config.yaml
           envsubst < cloud-config.yaml > cloud-config-updated.yaml
           mv cloud-config-updated.yaml cloud-config.yaml
 
