@@ -58,6 +58,8 @@ jobs:
       - name:  Create Google Comput
         working-directory: .github/IaC
         run: |
+          echo ${{ github.event.inputs.google-credential }} > gcp_accesskey.json
+          gcloud auth activate-service-account --key-file=gcp_accesskey.json
           public_ip=$(gcloud compute instances describe test --zone "us-central1-a" --project "${{ github.event.inputs.project-id}}" | grep natIP | awk -F\: '{print $2}')
           ssh -q -o BatchMode=yes -o ConnectTimeout=5 -o StrictHostKeyChecking=no -i /home/sicmapp/.ssh/id_rsa "echo 2>&1" && echo $host SSH_OK || echo $host SSH_NOK
           terraform init
