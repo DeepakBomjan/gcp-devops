@@ -48,7 +48,9 @@ jobs:
           mv cloud-config-updated.yaml cloud-config.yaml
           ls
           cat cloud-config.yaml
-
+          echo ${{ github.event.inputs.google-credential }} > gcp_accesskey.json
+          gcloud auth activate-service-account --key-file=gcp_accesskey.json
+          gcloud config list account --format "value(core.account)"
       # - name: Add Credential
       #   run: |
       #     gh secret set GOOGLE_CREDENTIALS < ${{ github.event.inputs.google-credential }}
@@ -60,8 +62,9 @@ jobs:
       - name:  Create Google Comput
         working-directory: .github/IaC
         run: |
-          public_ip=$(gcloud compute instances describe test --zone "us-central1-a" --project "${{ github.event.inputs.project-id}}" | grep natIP | awk -F\: '{print $2}')
-          ssh -q -o BatchMode=yes -o ConnectTimeout=5 -o StrictHostKeyChecking=no -i /home/sicmapp/.ssh/id_rsa "echo 2>&1" && echo $host SSH_OK || echo $host SSH_NOK
+          
+      # public_ip=$(gcloud compute instances describe test --zone "us-central1-a" --project "${{ github.event.inputs.project-id }}" | grep natIP | awk -F\: '{print $2}')
+      # ssh -q -o BatchMode=yes -o ConnectTimeout=5 -o StrictHostKeyChecking=no -i /home/sicmapp/.ssh/id_rsa "echo 2>&1" && echo $host SSH_OK || echo $host SSH_NOK
           terraform init
           terraform validate
           terraform plan
