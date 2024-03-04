@@ -48,7 +48,7 @@ jobs:
           mv cloud-config-updated.yaml cloud-config.yaml
           ls
           cat cloud-config.yaml
-          echo ${{ github.event.inputs.google-credential }} > gcp_accesskey.json
+          echo "${{ github.event.inputs.google-credential }}" > gcp_accesskey.json
           #gcloud auth activate-service-account --key-file=gcp_accesskey.json
           #gcloud config list account --format "value(core.account)"
       # - name: Add Credential
