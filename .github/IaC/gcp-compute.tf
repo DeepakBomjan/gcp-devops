@@ -23,9 +23,11 @@ variable "server" {
 
 resource "google_compute_instance" "lab-machine" {
   name         = "gitlab-node-${var.branch_name}"
-  machine_type = "custom-2-6400"
+  machine_type = "custom-1-2816"
 
   zone         = "us-central1-a"
+
+  allow_stopping_for_update = true
 
   metadata = {
     # ssh-keys = "cloud_user_p_59cf731f:${file("./aleo_test_gcp_rsa.pub")}"

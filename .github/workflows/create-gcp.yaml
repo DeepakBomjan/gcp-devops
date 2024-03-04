@@ -12,11 +12,11 @@ on:
         required: true
         type: string
         default: ""
-      # project-id:
-      #   description: Input project id
-      #   required: true
-      #   type: string
-      #   default: ""
+      project-id:
+        description: Input project id
+        required: true
+        type: string
+        default: ""
 jobs:
   create_google_vm:
     runs-on: ubuntu-latest
@@ -43,12 +43,10 @@ jobs:
       - name: Update cloud-init configuration
         working-directory: .github/IaC
         run: |
-          find ./ -type f -name cloud-config.yaml
+          ls -la
           envsubst < cloud-config.yaml > cloud-config-updated.yaml
           mv cloud-config-updated.yaml cloud-config.yaml
-          ls
-          cat cloud-config.yaml
-        
+
       # - name: Add Credential
       #   run: |
       #     gh secret set GOOGLE_CREDENTIALS < ${{ github.event.inputs.google-credential }}
@@ -59,7 +57,9 @@ jobs:
       
       - name:  Create Google Comput
         working-directory: .github/IaC
-        run: |  
+        run: |
+          public_ip=$(gcloud compute instances describe test --zone "us-central1-a" --project "${{ github.event.inputs.project-id}}" | grep natIP | awk -F\: '{print $2}')
+          ssh -q -o BatchMode=yes -o ConnectTimeout=5 -o StrictHostKeyChecking=no -i /home/sicmapp/.ssh/id_rsa "echo 2>&1" && echo $host SSH_OK || echo $host SSH_NOK
           terraform init
           terraform validate
           terraform plan
