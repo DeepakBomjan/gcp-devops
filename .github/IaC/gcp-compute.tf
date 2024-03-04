@@ -8,28 +8,40 @@ locals {
   gcp_accesskey = jsondecode(file("gcp_accesskey.json"))
 }
 
+variable "branch_name" {
+  type = string
+  
+}
+
+variable "server" {
+  type = string
+  default = "compute"
+  
+}
 
 
-resource "google_compute_instance" "aleo-node" {
+
+resource "google_compute_instance" "lab-machine" {
   name         = "gitlab-node-${var.branch_name}"
-  machine_type = "custom-2-6000"
+  machine_type = "custom-2-6400"
 
   zone         = "us-central1-a"
 
   metadata = {
-    ssh-keys = "cloud_user_p_59cf731f:${file("./aleo_test_gcp_rsa.pub")}"
+    # ssh-keys = "cloud_user_p_59cf731f:${file("./aleo_test_gcp_rsa.pub")}"
     user-data = file("${path.module}/cloud-config.yaml")
   }
 
 
   boot_disk {
     initialize_params {
-      image = "ubuntu-os-cloud/ubuntu-2004-lts"
+      image = "ubuntu-os-cloud/ubuntu-2204-lts"
       size = 50
     }
   }
 
-  metadata_startup_script = file("./startup.sh")
+  # metadata_startup_script = file("./startup.sh")
+  metadata_startup_script = templatefile("${path.module}/startup.sh.tpl", { server = var.server })
   network_interface {
     network = "default"
 
@@ -40,7 +52,7 @@ resource "google_compute_instance" "aleo-node" {
 }
 
 # Define the firewall rule to allow all incoming traffic
-resource "google_compute_firewall" "aleonode_firewall" {
+resource "google_compute_firewall" "lab_machine_firewall" {
   name    = "allow-all"
   network = "default"
 
@@ -53,5 +65,5 @@ resource "google_compute_firewall" "aleonode_firewall" {
 
 
 output "public_ip" {
-  value = google_compute_instance.aleo-node.network_interface[0].access_config[0].nat_ip
+  value = google_compute_instance.lab-machine.network_interface[0].access_config[0].nat_ip
 }
