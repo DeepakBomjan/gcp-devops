@@ -12,11 +12,11 @@ on:
         required: true
         type: string
         default: ""
-      project-id:
-        description: Input project id
-        required: true
-        type: string
-        default: ""
+      # project-id:
+      #   description: Input project id
+      #   required: true
+      #   type: string
+      #   default: ""
 jobs:
   create_google_vm:
     runs-on: ubuntu-latest
@@ -46,6 +46,8 @@ jobs:
           find ./ -type f -name cloud-config.yaml
           envsubst < cloud-config.yaml > cloud-config-updated.yaml
           mv cloud-config-updated.yaml cloud-config.yaml
+          ls
+          cat cloud-config.yaml
 
       # - name: Add Credential
       #   run: |
